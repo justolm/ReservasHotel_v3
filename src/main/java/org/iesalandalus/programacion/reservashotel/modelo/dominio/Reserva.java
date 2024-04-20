@@ -64,7 +64,8 @@ public class Reserva {
         setPrecio();
     }
 
-    public Huesped getHuesped() {
+    public Huesped getHuesped()
+    {
         return new Huesped(huesped);
     }
 

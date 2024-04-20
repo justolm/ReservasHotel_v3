@@ -48,13 +48,13 @@ public class Doble extends Habitacion {
         if (numCamasDobles == 1 && numCamasIndividuales ==2) {
             throw new IllegalArgumentException("ERROR: La distribución de camas en una habitación doble tiene que ser " + MAX_NUM_CAMAS_INDIVIDUALES + " camas individuales y " + MIN_NUM_CAMAS_DOBLES + " doble o " + MIN_NUM_CAMAS_INDIVIDUALES + " camas individuales y " + MAX_NUM_CAMAS_DOBLES + " doble");
         }
-        if (numCamasIndividuales == 1) {
+        else if (numCamasIndividuales == 1) {
             throw new IllegalArgumentException("ERROR: La distribución de camas en una habitación doble tiene que ser " + MAX_NUM_CAMAS_INDIVIDUALES + " camas individuales y " + MIN_NUM_CAMAS_DOBLES + " doble o " + MIN_NUM_CAMAS_INDIVIDUALES + " camas individuales y " + MAX_NUM_CAMAS_DOBLES + " doble");
         }
-        if (numCamasDobles == 0 && numCamasIndividuales == 0){
-            throw new IllegalArgumentException("ERROR: Hay que seleccionar una cama doble o dos individuales para la habitación doble.");
+        else if (numCamasDobles == 0 && numCamasIndividuales == 0) {
+            System.out.println("ERROR: Hay que seleccionar una cama doble o dos individuales para la habitación doble.");
         }
-        if (numCamasDobles < MIN_NUM_CAMAS_DOBLES || numCamasDobles > MAX_NUM_CAMAS_DOBLES || numCamasIndividuales < MIN_NUM_CAMAS_INDIVIDUALES || numCamasIndividuales > MAX_NUM_CAMAS_INDIVIDUALES) {
+        else if (numCamasDobles < MIN_NUM_CAMAS_DOBLES || numCamasDobles > MAX_NUM_CAMAS_DOBLES || numCamasIndividuales < MIN_NUM_CAMAS_INDIVIDUALES || numCamasIndividuales > MAX_NUM_CAMAS_INDIVIDUALES) {
             throw new IllegalArgumentException("ERROR: Se ha introducido un número de camas fuera de los parámetros aceptados.");
         }
     }

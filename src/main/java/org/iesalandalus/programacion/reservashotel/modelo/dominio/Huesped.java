@@ -3,6 +3,7 @@ package org.iesalandalus.programacion.reservashotel.modelo.dominio;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -88,10 +89,10 @@ public class Huesped {
         for (String palabra : palabras) {
             if (!palabra.isEmpty()) {
                 if (inicioNombre) {
-                    nombreFormateado = Character.toUpperCase(palabra.charAt(0)) + palabra.substring(1).toLowerCase();
+                    nombreFormateado = Character.toUpperCase(palabra.charAt(0)) + palabra.substring(1);
                     inicioNombre = false;
                 } else {
-                    nombreFormateado = nombreFormateado + ' ' + Character.toUpperCase(palabra.charAt(0)) + palabra.substring(1).toLowerCase();
+                    nombreFormateado = nombreFormateado + ' ' + Character.toUpperCase(palabra.charAt(0)) + palabra.substring(1);
                 }
             }
         }
