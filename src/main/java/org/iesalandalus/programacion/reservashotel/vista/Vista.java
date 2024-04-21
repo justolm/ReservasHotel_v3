@@ -16,6 +16,8 @@ public class Vista {
     private Controlador controlador;
     private boolean datosInicializados=false; // Para comprobar si ya se han inicializado los datos previamente.
 
+    public Vista(){};
+
     public void setControlador(Controlador controlador) throws NullPointerException {
         if (controlador==null){
             throw new NullPointerException("ERROR: El controlador no puede ser nulo.");
@@ -23,7 +25,7 @@ public class Vista {
         this.controlador = controlador;
     }
 
-    public void comenzar(){
+    public void comenzar() {
         try{
             Opcion opcion = null;
             do{
@@ -41,10 +43,10 @@ public class Vista {
         }
     }
 
-    public void terminar(){
+    public void terminar() {
         System.out.println("Final de la ejecución.");
     }
-
+/*
     private void ejecutarOpcion(Opcion opcion) throws IllegalArgumentException, NullPointerException, OperationNotSupportedException {
         switch (opcion)
         {
@@ -129,12 +131,12 @@ public class Vista {
             case SALIR:
                 break;
         }
-    }
+    }*/
 
-    private void insertarHuesped() {
+    public void insertarHuesped() {
         Huesped huesped;
         try {
-            huesped=Consola.leerHuesped();
+            huesped = Consola.leerHuesped();
             controlador.insertar(huesped);
             System.out.println("Huésped insertado correctamente.");
         } catch (OperationNotSupportedException | NullPointerException | IllegalArgumentException e) {
@@ -142,7 +144,7 @@ public class Vista {
         }
     }
 
-    private void buscarHuesped() {
+    public void buscarHuesped() {
         Huesped huesped, huespedEncontrado;
         try {
             huesped=Consola.getHuespedPorDni();
@@ -159,7 +161,7 @@ public class Vista {
         }
     }
 
-    private void borrarHuesped(){
+    public void borrarHuesped() {
         Huesped huesped;
         try {
             huesped=Consola.getHuespedPorDni();
@@ -170,7 +172,7 @@ public class Vista {
         }
     }
 
-    private void mostrarHuespedes(){
+    public void mostrarHuespedes() {
         try {
             if (!controlador.getHuespedes().isEmpty()){
                 List<Huesped> listadoHuespedes = controlador.getHuespedes();
@@ -187,7 +189,7 @@ public class Vista {
         }
     }
 
-    private void insertarHabitacion(){
+    public void insertarHabitacion() {
         try {
             Habitacion habitacion;
             habitacion = Consola.leerHabitacion();
@@ -198,7 +200,7 @@ public class Vista {
         }
     }
 
-    private void buscarHabitacion(){
+    public void buscarHabitacion() {
         Habitacion habitacion, habitacionEncontrada;
         try {
             habitacion = Consola.leerHabitacionPorIdentificador();
@@ -212,7 +214,7 @@ public class Vista {
         }
     }
 
-    private void borrarHabitacion(){
+    public void borrarHabitacion() {
         Habitacion habitacion;
         try {
             habitacion = Consola.leerHabitacionPorIdentificador();
@@ -223,7 +225,7 @@ public class Vista {
         }
     }
 
-    private void mostrarHabitaciones(){
+    public void mostrarHabitaciones() {
         try {
             if(!controlador.getHabitaciones().isEmpty()){
                 List<Habitacion> ListadoHabitaciones = controlador.getHabitaciones();
@@ -240,12 +242,25 @@ public class Vista {
         }
     }
 
-    private void insertarReserva() {
+    public void insertarReserva() {
         Reserva reserva;
         Habitacion habitacion;
+        TipoHabitacion tipoHabitacion=null;
         try {
             reserva=Consola.leerReserva();
-            habitacion = consultarDisponibilidad(reserva.getHabitacion().getTipoHabitacion(), reserva.getFechaInicioReserva(), reserva.getFechaFinReserva());
+            if (reserva.getHabitacion()instanceof Simple){
+                tipoHabitacion=TipoHabitacion.SIMPLE;
+            }
+            if (reserva.getHabitacion()instanceof Doble){
+                tipoHabitacion=TipoHabitacion.DOBLE;
+            }
+            if (reserva.getHabitacion()instanceof Triple){
+                tipoHabitacion=TipoHabitacion.TRIPLE;
+            }
+            if (reserva.getHabitacion()instanceof Suite){
+                tipoHabitacion=TipoHabitacion.SUITE;
+            }
+            habitacion = consultarDisponibilidad(tipoHabitacion, reserva.getFechaInicioReserva(), reserva.getFechaFinReserva());
             if (habitacion!=null){
                 controlador.insertar(new Reserva(controlador.buscar(reserva.getHuesped()),habitacion,reserva.getRegimen(),reserva.getFechaInicioReserva(),reserva.getFechaFinReserva(),reserva.getNumeroPersonas()));
                 System.out.println("Reserva insertada correctamente.");
@@ -258,7 +273,17 @@ public class Vista {
         }
     }
 
-    private void listarReservas (Huesped huesped){
+    public void mostrarReservasHuesped() {
+        Huesped huesped;
+        try {
+            huesped = Consola.getHuespedPorDni();
+            listarReservas(huesped);
+        } catch (NullPointerException | IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void listarReservas (Huesped huesped) {
         if (huesped==null){
             System.out.println("ERROR: No se pueden listar reservas de un huésped nulo.");
         }
@@ -279,7 +304,57 @@ public class Vista {
             }
         }
     }
-    private void listarReservas (TipoHabitacion tipoHabitacion){
+
+    public void mostrarReservasTipoHabitacion() {
+        Habitacion habitacion;
+        TipoHabitacion tipoHabitacion;
+        habitacion = Consola.leerHabitacionPorIdentificador();
+        if (habitacion instanceof Simple) {
+            tipoHabitacion = TipoHabitacion.SIMPLE;
+        }
+        else if (habitacion instanceof Doble) {
+            tipoHabitacion = TipoHabitacion.DOBLE;
+        }
+        else if (habitacion instanceof Triple) {
+            tipoHabitacion = TipoHabitacion.TRIPLE;
+        }
+        else {
+            tipoHabitacion = TipoHabitacion.SUITE;
+        }
+        listarReservas(tipoHabitacion);
+    }
+
+    public void comprobarDisponibilidad() {
+        Reserva reserva;
+        Habitacion habitacion;
+        TipoHabitacion tipoHabitacion=null;
+        try {
+            reserva = Consola.leerReserva();
+            if (reserva.getHabitacion() instanceof Simple) {
+                tipoHabitacion = TipoHabitacion.SIMPLE;
+            }
+            else if (reserva.getHabitacion() instanceof Doble) {
+                tipoHabitacion = TipoHabitacion.DOBLE;
+            }
+            else if (reserva.getHabitacion() instanceof Triple) {
+                tipoHabitacion = TipoHabitacion.TRIPLE;
+            }
+            else {
+                tipoHabitacion = TipoHabitacion.SUITE;
+            }
+            habitacion = consultarDisponibilidad(tipoHabitacion, reserva.getFechaInicioReserva(), reserva.getFechaFinReserva());
+            if (habitacion!=null) {
+                System.out.println(habitacion.toString());
+            }
+            else {
+                System.out.println("No se ha encontrado ninguna habitación disponible del tipo " + tipoHabitacion.toString() + " disponible entre el " + reserva.getFechaInicioReserva() + " y el " + reserva.getFechaFinReserva() + '.');
+            }
+        } catch (NullPointerException | IllegalArgumentException | OperationNotSupportedException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void listarReservas (TipoHabitacion tipoHabitacion) {
         if (tipoHabitacion==null){
             System.out.println("ERROR: No se pueden listar reservas de un tipo de habitación nulo.");
         }
@@ -300,7 +375,8 @@ public class Vista {
             }
         }
     }
-    private List<Reserva> getReservasAnulables(List<Reserva> reservasAAnular) {
+
+    public List<Reserva> getReservasAnulables(List<Reserva> reservasAAnular) {
         if (reservasAAnular==null){
             return null;
             //throw new NullPointerException("ERROR: El listado de reservas está vacío.");
@@ -315,7 +391,8 @@ public class Vista {
         }
         return reservasAnulables;
     }
-    private void anularReserva() throws NullPointerException, IllegalArgumentException {
+
+    public void anularReserva() throws NullPointerException, IllegalArgumentException {
         int reservasAnulables = 0;
         String eleccion;
         Huesped huesped = new Huesped(Consola.getHuespedPorDni());
@@ -355,12 +432,13 @@ public class Vista {
             System.out.println("Reserva eliminada.");
         }
     }
-    private void mostrarReservas() throws NullPointerException {
+
+    public void mostrarReservas() throws NullPointerException {
         List<Reserva> reservas1 = new ArrayList<>();
         reservas1 = controlador.getReservas();
         reservas1.sort(Comparator.comparing(Reserva::getFechaInicioReserva).reversed().thenComparing(reserva -> reserva.getHabitacion().getPlanta()).thenComparing(reserva -> reserva.getHabitacion().getPuerta()));
         int numReservas = 0;
-        if (reservas1==null){
+        if (reservas1.isEmpty()){
             throw new NullPointerException("ERROR: No hay reservas almacenadas.");
         }
         for (Reserva reserva2 : reservas1){
@@ -372,7 +450,7 @@ public class Vista {
         }
     }
 
-    private Habitacion consultarDisponibilidad(TipoHabitacion tipoHabitacion, LocalDate fechaInicioReserva, LocalDate fechaFinReserva)
+    public Habitacion consultarDisponibilidad(TipoHabitacion tipoHabitacion, LocalDate fechaInicioReserva, LocalDate fechaFinReserva)
     {
         boolean tipoHabitacionEncontrada=false;
         Habitacion habitacionDisponible=null;
@@ -395,7 +473,12 @@ public class Vista {
                 {
                     //Si la primera de las habitaciones encontradas del tipo solicitado no tiene reservas en el futuro,
                     // quiere decir que está disponible.
-                    habitacionDisponible=new Habitacion(habitacionesTipoSolicitado.get(i));
+                    switch (tipoHabitacion){
+                        case SIMPLE -> habitacionDisponible = new Simple((Simple) habitacionesTipoSolicitado.get(i));
+                        case DOBLE -> habitacionDisponible = new Doble((Doble) habitacionesTipoSolicitado.get(i));
+                        case TRIPLE -> habitacionDisponible = new Triple((Triple) habitacionesTipoSolicitado.get(i));
+                        case SUITE -> habitacionDisponible = new Suite((Suite) habitacionesTipoSolicitado.get(i));
+                    }
                     tipoHabitacionEncontrada=true;
                 }
                 else {
@@ -410,7 +493,12 @@ public class Vista {
                     mostrar(reservasFuturas);*/
 
                     if (fechaInicioReserva.isAfter(reservasFuturas.get(0).getFechaFinReserva())) {
-                        habitacionDisponible = new Habitacion(habitacionesTipoSolicitado.get(i));
+                        switch (tipoHabitacion){
+                            case SIMPLE -> habitacionDisponible = new Simple((Simple) habitacionesTipoSolicitado.get(i));
+                            case DOBLE -> habitacionDisponible = new Doble((Doble) habitacionesTipoSolicitado.get(i));
+                            case TRIPLE -> habitacionDisponible = new Triple((Triple) habitacionesTipoSolicitado.get(i));
+                            case SUITE -> habitacionDisponible = new Suite((Suite) habitacionesTipoSolicitado.get(i));
+                        }
                         tipoHabitacionEncontrada = true;
                     }
 
@@ -426,7 +514,12 @@ public class Vista {
                         mostrar(reservasFuturas);*/
 
                         if (fechaFinReserva.isBefore(reservasFuturas.get(0).getFechaInicioReserva())) {
-                            habitacionDisponible = new Habitacion(habitacionesTipoSolicitado.get(i));
+                            switch (tipoHabitacion){
+                                case SIMPLE -> habitacionDisponible = new Simple((Simple) habitacionesTipoSolicitado.get(i));
+                                case DOBLE -> habitacionDisponible = new Doble((Doble) habitacionesTipoSolicitado.get(i));
+                                case TRIPLE -> habitacionDisponible = new Triple((Triple) habitacionesTipoSolicitado.get(i));
+                                case SUITE -> habitacionDisponible = new Suite((Suite) habitacionesTipoSolicitado.get(i));
+                            }
                             tipoHabitacionEncontrada = true;
                         }
                     }
@@ -441,7 +534,12 @@ public class Vista {
                                 if(fechaInicioReserva.isAfter(reservasFuturas.get(j - 1).getFechaFinReserva()) &&
                                         fechaFinReserva.isBefore(reservasFuturas.get(j).getFechaInicioReserva())) {
 
-                                    habitacionDisponible = new Habitacion(habitacionesTipoSolicitado.get(i));
+                                    switch (tipoHabitacion){
+                                        case SIMPLE -> habitacionDisponible = new Simple((Simple) habitacionesTipoSolicitado.get(i));
+                                        case DOBLE -> habitacionDisponible = new Doble((Doble) habitacionesTipoSolicitado.get(i));
+                                        case TRIPLE -> habitacionDisponible = new Triple((Triple) habitacionesTipoSolicitado.get(i));
+                                        case SUITE -> habitacionDisponible = new Suite((Suite) habitacionesTipoSolicitado.get(i));
+                                    }
                                     tipoHabitacionEncontrada = true;
                                 }
                             }
@@ -453,7 +551,7 @@ public class Vista {
         return habitacionDisponible;
     }
 
-    private void realizarCheckin() throws NullPointerException, IllegalArgumentException {
+    public void realizarCheckin() throws NullPointerException, IllegalArgumentException {
         List<Reserva> reservas;
         Reserva reserva = null;
         LocalDateTime fecha = null;
@@ -505,7 +603,7 @@ public class Vista {
         }
     }
 
-    private void realizarCheckout() throws NullPointerException, IllegalArgumentException {
+    public void realizarCheckout() throws NullPointerException, IllegalArgumentException {
         List<Reserva> reservas;
         Reserva reserva = null;
         LocalDateTime fecha = null;
@@ -552,17 +650,20 @@ public class Vista {
         }
     }
 
+    // método creado para inicializar algunos datos al trabajar con memoria y así optimizar las pruebas
     private void inicializarDatos () throws NullPointerException, IllegalArgumentException, OperationNotSupportedException{
         Huesped huesped =  new Huesped("Justo Lopez", "45596798b", "justolm@gmail.com", "666619806", LocalDate.of(1980, 11, 19));
         Huesped huesped1 = new Huesped("Noe Lilla", "11111111h", "noe@lilla.es", "650476674", LocalDate.of(1982, 11, 7));
-        Habitacion habitacion = new Habitacion(1,1,45.0, TipoHabitacion.DOBLE);
-        Habitacion habitacion1 = new Habitacion(3,13,80,TipoHabitacion.SUITE);
+        Habitacion habitacion = new Simple(1,1,45.0);
+        Habitacion habitacion1 = new Suite(3,13,80,2,true);
+        Habitacion habitacion2 = new Doble(2,2,80,0,2);
         Reserva reserva = new Reserva(huesped, habitacion1, Regimen.MEDIA_PENSION, LocalDate.now(),LocalDate.now().plusDays(2),2);
         Reserva reserva1 = new Reserva(huesped, habitacion, Regimen.SOLO_ALOJAMIENTO, LocalDate.of(2024, 5, 13), LocalDate.of(2024, 5, 15), 2);
         controlador.insertar(huesped);
         controlador.insertar(huesped1);
         controlador.insertar(habitacion);
         controlador.insertar(habitacion1);
+        controlador.insertar(habitacion2);
         controlador.insertar(reserva);
         controlador.insertar(reserva1);
         System.out.println("Datos inicializados. ");
