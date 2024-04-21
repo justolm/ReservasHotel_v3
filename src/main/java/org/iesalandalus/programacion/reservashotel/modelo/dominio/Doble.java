@@ -2,10 +2,10 @@ package org.iesalandalus.programacion.reservashotel.modelo.dominio;
 
 public class Doble extends Habitacion {
     private static final int NUM_MAXIMO_PERSONAS = 2;
-    protected static final int MIN_NUM_CAMAS_INDIVIDUALES = 0;
-    protected static final int MAX_NUM_CAMAS_INDIVIDUALES = 2;
-    protected static final int MIN_NUM_CAMAS_DOBLES = 0;
-    protected static final int MAX_NUM_CAMAS_DOBLES = 1;
+    public static final int MIN_NUM_CAMAS_INDIVIDUALES = 0;
+    public static final int MAX_NUM_CAMAS_INDIVIDUALES = 2;
+    public static final int MIN_NUM_CAMAS_DOBLES = 0;
+    public static final int MAX_NUM_CAMAS_DOBLES = 1;
     private int numCamasIndividuales, numCamasDobles;
 
     public Doble (int planta, int puerta, double precio, int numCamasIndividuales, int numCamasDobles) {

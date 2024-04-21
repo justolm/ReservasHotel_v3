@@ -84,10 +84,10 @@ public class Consola {
         return null;
     }
 
-    public static Habitacion leerHabitacion(){
+    public static Habitacion leerHabitacion() throws NullPointerException, IllegalArgumentException {
         int planta=1, puerta=0, precio=0;
         TipoHabitacion tipoHabitacion;
-        Habitacion habitacion;
+        Habitacion habitacion=null;
         System.out.println("Introduzca los datos de la habitación. ");
         do{
             if (planta != 1){
@@ -111,7 +111,45 @@ public class Consola {
             precio=Entrada.entero();
         } while (precio < Habitacion.MIN_PRECIO_HABITACION || precio > Habitacion.MAX_PRECIO_HABITACION);
         tipoHabitacion=leerTipoHabitacion();
-        habitacion=new Habitacion(planta, puerta, precio, tipoHabitacion);
+        if (tipoHabitacion.equals(TipoHabitacion.SIMPLE)){
+            habitacion = new Simple(planta, puerta, precio);
+        }
+        else if (tipoHabitacion.equals(TipoHabitacion.DOBLE)) {
+            int numCamasInd, numCamasDob;
+            do {
+                System.out.println("Introduzca el número de camas individuales (" + Doble.MIN_NUM_CAMAS_INDIVIDUALES + " - " + Doble.MAX_NUM_CAMAS_INDIVIDUALES + "): ");
+                numCamasInd = Entrada.entero();
+                System.out.println("Introduzca el número de camas dobles (" + Doble.MIN_NUM_CAMAS_DOBLES + " - " + Doble.MAX_NUM_CAMAS_DOBLES + "): ");
+                numCamasDob = Entrada.entero();
+            } while (numCamasInd < Doble.MIN_NUM_CAMAS_INDIVIDUALES || numCamasInd > Doble.MAX_NUM_CAMAS_INDIVIDUALES || numCamasDob < Doble.MIN_NUM_CAMAS_DOBLES || numCamasDob > Doble.MAX_NUM_CAMAS_DOBLES);
+            habitacion = new Doble(planta, puerta, precio, numCamasInd, numCamasDob);
+        }
+        else if (tipoHabitacion.equals(TipoHabitacion.TRIPLE)) {
+            int numCamasInd, numCamasDob, numBanos;
+            do {
+                System.out.println("Introduzca el número de camas individuales (" + Triple.MIN_NUM_CAMAS_INDIVIDUALES + " - " + Triple.MAX_NUM_CAMAS_INDIVIDUALES + "): ");
+                numCamasInd = Entrada.entero();
+                System.out.println("Introduzca el número de camas dobles (" + Triple.MIN_NUM_CAMAS_DOBLES + " - " + Triple.MAX_NUM_CAMAS_DOBLES + "): ");
+                numCamasDob = Entrada.entero();
+                System.out.println("Introduzca el número de baños (" + Triple.MIN_NUM_BANOS + " - " + Triple.MAX_NUM_BANOS + "): ");
+                numBanos = Entrada.entero();
+            } while (numCamasInd < Triple.MIN_NUM_CAMAS_INDIVIDUALES || numCamasInd > Triple.MAX_NUM_CAMAS_INDIVIDUALES || numCamasDob < Triple.MIN_NUM_CAMAS_DOBLES || numCamasDob > Triple.MAX_NUM_CAMAS_DOBLES || numBanos < Triple.MIN_NUM_BANOS || numBanos > Triple.MAX_NUM_BANOS);
+            habitacion = new Triple(planta, puerta, precio, numBanos, numCamasInd, numCamasDob);
+        }
+        else if (tipoHabitacion.equals(TipoHabitacion.SUITE)) {
+            int numBanos;
+            String hayJacuzzi;
+            do {
+                System.out.println("Introduzca el número de baños (" + Suite.MIN_NUM_BANOS + " - " + Suite.MAX_NUM_BANOS + "): ");
+                numBanos = Entrada.entero();
+                System.out.println("¿Quiere Jacuzzi (S/N): ");
+                hayJacuzzi = Entrada.cadena();
+                if (hayJacuzzi.equalsIgnoreCase("S")) {
+                    hayJacuzzi="true";
+                }
+            } while (numBanos < Suite.MIN_NUM_BANOS || numBanos > Suite.MAX_NUM_BANOS);
+            habitacion = new Suite(planta, puerta, precio, numBanos, Boolean.parseBoolean(hayJacuzzi));
+        }
         return habitacion;
     }
 
@@ -129,7 +167,7 @@ public class Consola {
         if (puerta<Habitacion.MIN_NUMERO_PUERTA || puerta>Habitacion.MAX_NUMERO_PUERTA){
             throw new IllegalArgumentException("ERROR: El número de puerta es incorrecto.");
         }
-        habitacion = new Habitacion(planta,puerta,40,TipoHabitacion.SIMPLE);
+        habitacion = new Simple(planta,puerta,40);
         return habitacion;
     }
 
@@ -172,14 +210,19 @@ public class Consola {
         Huesped huesped;
         Regimen regimen;
         TipoHabitacion tipoHabitacion;
-        Habitacion habitacion;
+        Habitacion habitacion=null;
         LocalDate fechaInicioReserva, fechaFinReserva;
         String entrada;
         int numeroPersonas,maximoPersonas;
         huesped = new Huesped(getHuespedPorDni());
         tipoHabitacion = leerTipoHabitacion();
-        habitacion= new Habitacion(3,14,50,tipoHabitacion);
-        maximoPersonas = tipoHabitacion.getNumeroMaximoPersonas();
+        switch (tipoHabitacion){
+            case SIMPLE -> habitacion = new Simple(3,14,50);
+            case DOBLE -> habitacion = new Doble(3,14,50,0,1);
+            case TRIPLE -> habitacion = new Triple(3,14,50,1,1,1);
+            case SUITE -> habitacion = new Suite(3,14,50,1,true);
+        }
+        maximoPersonas = habitacion.getNumeroMaximoPersonas();
         do{
             System.out.print("Introduzca el número de personas: ");
             numeroPersonas=Entrada.entero();

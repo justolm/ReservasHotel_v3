@@ -2,12 +2,12 @@ package org.iesalandalus.programacion.reservashotel.modelo.dominio;
 
 public class Triple extends Habitacion {
     private static final int NUM_MAXIMO_PERSONAS = 3;
-    protected static final int MIN_NUM_BANOS = 0;
-    protected static final int MAX_NUM_BANOS = 2;
-    protected static final int MIN_NUM_CAMAS_INDIVIDUALES = 1;
-    protected static final int MAX_NUM_CAMAS_INDIVIDUALES = 3;
-    protected static final int MIN_NUM_CAMAS_DOBLES = 0;
-    protected static final int MAX_NUM_CAMAS_DOBLES = 1;
+    public static final int MIN_NUM_BANOS = 0;
+    public static final int MAX_NUM_BANOS = 2;
+    public static final int MIN_NUM_CAMAS_INDIVIDUALES = 1;
+    public static final int MAX_NUM_CAMAS_INDIVIDUALES = 3;
+    public static final int MIN_NUM_CAMAS_DOBLES = 0;
+    public static final int MAX_NUM_CAMAS_DOBLES = 1;
     private int numBanos, numCamasIndividuales, numCamasDobles;
 
     public Triple (int planta, int puerta, double precio, int numBanos, int numCamasIndividuales, int numCamasDobles) {

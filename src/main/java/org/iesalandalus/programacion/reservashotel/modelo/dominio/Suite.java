@@ -2,8 +2,8 @@ package org.iesalandalus.programacion.reservashotel.modelo.dominio;
 
 public class Suite extends Habitacion {
     private static final int NUM_MAXIMO_PERSONAS = 4;
-    protected static final int MIN_NUM_BANOS = 0;
-    protected static final int MAX_NUM_BANOS = 2;
+    public static final int MIN_NUM_BANOS = 0;
+    public static final int MAX_NUM_BANOS = 2;
     private int numBanos;
     private boolean tieneJacuzzi;
 
