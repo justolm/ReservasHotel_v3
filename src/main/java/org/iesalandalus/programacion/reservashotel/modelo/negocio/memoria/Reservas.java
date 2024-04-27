@@ -23,9 +23,7 @@ public class Reservas implements IReservas {
 
     private List<Reserva> copiaProfundaReservas() {
         List<Reserva> copiaProfundaReservas=new ArrayList<>();
-        for (int i=0 ; i<coleccionReservas.size() ; i++){
-            copiaProfundaReservas.add(coleccionReservas.get(i));
-        }
+        copiaProfundaReservas.addAll(coleccionReservas);
         return copiaProfundaReservas;
     }
 
@@ -80,10 +78,10 @@ public class Reservas implements IReservas {
 
     public List<Reserva> getReservas (TipoHabitacion tipoHabitacion) throws NullPointerException{
         List<Reserva> copiaProfundaHabitacionesHabitacion = new ArrayList<>();
-        for (int i=0 ; i < getTamano() ; i++){
-            if (tipoHabitacion==null){
-                throw new NullPointerException("ERROR: No se pueden buscar reservas de un tipo de habitación nula.");
-            }
+        if (tipoHabitacion==null){
+            throw new NullPointerException("ERROR: No se pueden buscar reservas de un tipo de habitación nula.");
+        }
+        for (int i=0 ; i < coleccionReservas.size() ; i++){
             if (coleccionReservas.get(i).getHabitacion() instanceof Simple && tipoHabitacion==TipoHabitacion.SIMPLE){
                 copiaProfundaHabitacionesHabitacion.add(new Reserva(coleccionReservas.get(i)));
             }

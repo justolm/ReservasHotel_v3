@@ -3,6 +3,7 @@ package org.iesalandalus.programacion.reservashotel.vista;
 import org.iesalandalus.programacion.reservashotel.modelo.dominio.*;
 import org.iesalandalus.programacion.utilidades.Entrada;
 import javax.naming.OperationNotSupportedException;
+import java.text.ParseException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -30,9 +31,9 @@ public class Consola {
         return elegido;
     }
 
-    public static Huesped leerHuesped() throws NullPointerException, IllegalArgumentException {
-        String nombre, dni, correo, telefono;
-        LocalDate fechaNacimiento;
+    public static Huesped leerHuesped() throws NullPointerException, IllegalArgumentException, ParseException {
+        String nombre, dni, correo, telefono, fecha;
+        LocalDate fechaNacimiento=null;
         System.out.println("Introduzca los datos del huésped. ");
         System.out.print("Nombre: ");
         nombre=Entrada.cadena();
@@ -43,7 +44,16 @@ public class Consola {
         System.out.print("Teléfono: ");
         telefono=Entrada.cadena();
         System.out.print("Fecha de nacimiento (AAAA-MM-DD): ");
-        fechaNacimiento= LocalDate.parse(Entrada.cadena());
+        fecha=Entrada.cadena();
+        if (fecha.isEmpty()) {
+            throw new IllegalArgumentException("ERROR: No se puede introducir una fecha vacía.");
+        }
+        try {
+            fechaNacimiento= LocalDate.parse(fecha);
+        } catch (DateTimeException e) {
+            System.out.println(e.getMessage());
+        }
+
         return (new Huesped(nombre, dni, correo, telefono, fechaNacimiento));
     }
 
@@ -52,7 +62,7 @@ public class Consola {
         System.out.println("Introduzca el DNI del huésped: ");
         dni=Entrada.cadena();
         dni=dni.toUpperCase();
-        if (dni==null){
+        if (dni.isEmpty()){
             throw new NullPointerException("ERROR: No se puede buscar un DNI vacío.");
         }
         return new Huesped("nombre",dni,"correo@falso.es","950000000", LocalDate.of(2000,1,1));
@@ -155,7 +165,7 @@ public class Consola {
 
     public static Habitacion leerHabitacionPorIdentificador() throws IllegalArgumentException {
         int planta, puerta;
-        Habitacion habitacion=null;
+        Habitacion habitacion;
         System.out.println("Introduzca los datos de la habitación. ");
         System.out.print("Planta (" + Habitacion.MIN_NUMERO_PLANTA + " - " + Habitacion.MAX_NUMERO_PLANTA + "): ");
         planta=Entrada.entero();
@@ -180,7 +190,7 @@ public class Consola {
             }
             System.out.println("Elija el tipo de habitación: ");
             for (TipoHabitacion tipoHabitacion1 : TipoHabitacion.values()){
-                System.out.println(tipoHabitacion1.ordinal() + " - " + tipoHabitacion1.name() + " (máximo " + tipoHabitacion1.getNumeroMaximoPersonas() + " personas).");
+                System.out.println(tipoHabitacion1.ordinal() + " - " + tipoHabitacion1.name());
             }
             tipoHab=Entrada.entero();
         } while (tipoHab<0 || tipoHab >=TipoHabitacion.values().length);

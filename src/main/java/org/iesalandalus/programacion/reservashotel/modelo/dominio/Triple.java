@@ -21,6 +21,9 @@ public class Triple extends Habitacion {
     public Triple (Triple habitacionTriple) {
         super(habitacionTriple);
         setNumBanos(numBanos);
+        if (numCamasIndividuales==0 && numCamasDobles==0){
+            numCamasIndividuales=MAX_NUM_CAMAS_INDIVIDUALES;
+        }
         setNumCamasIndividuales(numCamasIndividuales);
         setNumCamasDobles(numCamasDobles);
         validaNumCamas();

@@ -17,6 +17,9 @@ public class Doble extends Habitacion {
 
     public Doble (Doble habitacionDoble) {
         super(habitacionDoble);
+        if (numCamasIndividuales==0 && numCamasDobles==0){
+            numCamasIndividuales=MAX_NUM_CAMAS_INDIVIDUALES;
+        }
         setNumCamasIndividuales(numCamasIndividuales);
         setNumCamasDobles(numCamasDobles);
         validaNumCamas();

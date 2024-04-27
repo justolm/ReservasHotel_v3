@@ -15,10 +15,7 @@ public class Huespedes implements IHuespedes {
     }
 
     public List<Huesped> get() {
-        coleccionHuespedes=new ArrayList<>(copiaProfundaHuespedes());/*
-        for (int i = 0 ; i < copiaProfundaHuespedes().size() ; i++){
-            coleccionHuespedes.add(copiaProfundaHuespedes().get(i));
-        }*/
+        coleccionHuespedes=new ArrayList<>(copiaProfundaHuespedes());
         return coleccionHuespedes;
     }
 
@@ -50,7 +47,7 @@ public class Huespedes implements IHuespedes {
             throw new NullPointerException("ERROR: No se puede buscar un huésped nulo.");
         for(int i = 0; i < getTamano(); i++){
             if (coleccionHuespedes.get(i).equals(huesped)){
-                return huesped;
+                return coleccionHuespedes.get(i);
             }
         }
         return null;
